@@ -7,7 +7,9 @@ export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
 
 export default defineConfig({
   testDir: './tests',
-  reporter: [['list'], ['html', { outputFolder: './html-report', open: 'never' }]],
+  // reporter: [['list'], ['html', { outputFolder: './html-report', open: 'never' }]],
+  // reporter: [['list'], ['html', { outputFolder: './html-report', open: 'never' }]],
+  reporter: process.env.CI ? 'blob' : 'html',
   /* Retry on CI only */
   // retries: process.env.CI ? 2 : 0,
   /* Run tests in files in parallel */
