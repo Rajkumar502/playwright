@@ -1,26 +1,16 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  // await page.goto('https://www.google.com/');
+  await page.goto('https://playwright.dev/');
 });
 
-test('search playwright', async ({ page }) => {
-  await page.goto('https://www.google.com/');
-  if(await page.getByRole('button', { name: 'Accept all' })){
-    await page.getByRole('button', { name: 'Accept all' }).click();
-  }
-  await page.getByLabel('Search', { exact: true }).click();
-  await page.getByLabel('Search', { exact: true }).fill('playwright');
-  await page.getByText('playwright', { exact: true }).click();
-  await page.getByRole('link', { name: 'Playwright: Fast and reliable end-to-end testing for modern ... Playwright https://playwright.dev' }).click();
+test('playwright doc', async ({ page }) => {
+  await page.getByRole('link', { name: 'Docs' }).click();
+  await page.getByRole('link', { name: 'How to install Playwright' }).click();
 
 })
 
-test('search cypress', async ({ page }) => {
-  await page.goto('https://www.google.com/');
-  await page.getByRole('button', { name: 'Accept all' }).click();
-  await page.getByLabel('Search', { exact: true }).click();
-  await page.getByLabel('Search', { exact: true }).fill('cypress');
-  await page.getByText('cypress', { exact: true }).click();
-  await page.getByRole('link', { name: 'Cypress: JavaScript Component Testing and E2E Testing ... Cypress https://www.cypress.io' }).click();
+test('playwright api', async ({ page }) => {
+  await page.getByRole('link', { name: 'API', exact: true }).click();
+  await page.getByRole('link', { name: 'request', exact: true }).click();
 })
