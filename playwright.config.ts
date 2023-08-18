@@ -12,14 +12,23 @@ export default defineConfig({
   // retries: process.env.CI ? 2 : 0,
   /* Run tests in files in parallel */
   fullyParallel: true,
-
+  timeout: 30000,
   use: {
     headless: true,
     baseURL: 'https://en.wikipedia.org',
     // run traces on the first retry of a failed test
     trace: 'on-first-retry',
+    launchOptions: {
+      slowMo: 500,
+    },
+    screenshot: {
+      mode: 'only-on-failure',
+      fullPage: true,
+    },
   },
-
+  expect: {
+    timeout: 10000,
+  },
   projects: [
     // this matches all tests ending with .setup.ts
     {

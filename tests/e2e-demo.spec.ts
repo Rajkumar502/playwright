@@ -6,7 +6,9 @@ test.beforeEach(async ({ page }) => {
 
 test('search playwright', async ({ page }) => {
   await page.goto('https://www.google.com/');
-  await page.getByRole('button', { name: 'Accept all' }).click();
+  if(await page.getByRole('button', { name: 'Accept all' })){
+    await page.getByRole('button', { name: 'Accept all' }).click();
+  }
   await page.getByLabel('Search', { exact: true }).click();
   await page.getByLabel('Search', { exact: true }).fill('playwright');
   await page.getByText('playwright', { exact: true }).click();
