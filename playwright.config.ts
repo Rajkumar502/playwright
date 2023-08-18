@@ -11,7 +11,7 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
 
   use: {
     headless: false,
