@@ -7,6 +7,7 @@ export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
 
 export default defineConfig({
   testDir: './tests',
+  workers: 3,
   // reporter: [['list'], ['html', { outputFolder: './html-report', open: 'never' }]],
   // reporter: [['list'], ['html', { outputFolder: './html-report', open: 'never' }]],
   reporter: process.env.CI ? 'blob' : 'html',
