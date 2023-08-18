@@ -11,10 +11,10 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Run tests in files in parallel */
-  fullyParallel: false,
+  fullyParallel: true,
 
   use: {
-    headless: false,
+    headless: true,
     baseURL: 'https://en.wikipedia.org',
     // run traces on the first retry of a failed test
     trace: 'on-first-retry',
