@@ -39,7 +39,7 @@ jobs:
         if: steps.cache-playwright.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
-  test:
+  playwright-tests:
     name: 🧪 Test (${{ matrix.shard }}/${{ strategy.job-total }})
     needs: install
     timeout-minutes: 60
@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2]
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -72,6 +72,6 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: playwright-report-${{ matrix.shard }}_${{ strategy.job-total }}
-          path: playwright-report
-          retention-days: 30
+          name: all-blob-reports
+          path: blob-report
+          retention-days: 1
