@@ -1,37 +1,74 @@
 name: Playwright Tests
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+ 
 jobs:
+  install:
+    timeout-minutes: 60
+    name: 🔍 Install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+ 
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+ 
+      - name: Cache Playwright binaries
+        uses: actions/cache@v3
+        id: cache-playwright
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+ 
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+ 
+      - name: Install Playwright Browsers
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
   playwright-tests:
-    timeout-minutes: 20
+    name: 🧪 Test (${{ matrix.shard }}/${{ strategy.job-total }})
+    needs: install
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        shard: [1/3, 2/3, 3/3]
+        shard: [1, 2, 3]
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright browsers
-      run: npx playwright install --with-deps
-
-    - name: Run Playwright tests
-      run: npx playwright test --shard ${{ matrix.shard }}
-
-    - name: Upload blob report to GitHub Actions Artifacts
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: all-blob-reports
-        path: blob-report
-        retention-days: 1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+ 
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+ 
+      - name: Cache Playwright
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+ 
+      - name: Run Playwright tests
+        run: npx playwright test --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+ 
+      - uses: Upload blob report to GitHub Actions Artifacts
+        if: always()
+        with:
+          name: all-blob-reports
+          path: blob-report
+          retention-days: 1
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed
     if: always()
