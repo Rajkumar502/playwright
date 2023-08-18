@@ -7,13 +7,14 @@ export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
 
 export default defineConfig({
   testDir: './tests',
-  reporter: [['list'], ['html']],
+  reporter: [['list'], ['html', { outputFolder: './html-report', open: 'never' }]],
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Run tests in files in parallel */
   fullyParallel: true,
 
   use: {
+    headless: false,
     baseURL: 'https://en.wikipedia.org',
     // run traces on the first retry of a failed test
     trace: 'on-first-retry',
@@ -29,10 +30,10 @@ export default defineConfig({
     {
       name: 'e2e tests logged in',
       testMatch: '**/*loggedin.spec.ts',
-      dependencies: ['setup'],
-      use: {
-        storageState: STORAGE_STATE,
-      },
+      // dependencies: ['setup'],
+      // use: {
+      //   storageState: STORAGE_STATE,
+      // },
     },
     // this project runs all tests except the setup and logged in tests
     {
