@@ -9,7 +9,7 @@ export default defineConfig({
   testDir: './tests',
   reporter: [['list'], ['html', { outputFolder: './html-report', open: 'never' }]],
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  // retries: process.env.CI ? 2 : 0,
   /* Run tests in files in parallel */
   fullyParallel: true,
 
